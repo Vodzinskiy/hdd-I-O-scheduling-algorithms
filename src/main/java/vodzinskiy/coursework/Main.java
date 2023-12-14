@@ -4,19 +4,24 @@ import vodzinskiy.coursework.algorithms.FCFS;
 import vodzinskiy.coursework.algorithms.F_LOOK;
 import vodzinskiy.coursework.algorithms.SSTF;
 import vodzinskiy.coursework.algorithms.SchedulingAlgorithm;
+import vodzinskiy.coursework.enums.FileType;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
 
     public static int PROCESS_NUMBER = 10;
-    public static int TRACK_NUMBER = 500;
-    public static int NUMBER_OF_SECTORS_PER_TRACK = 100;
     public static int MAXIMUM_REQUEST_NUMBER = 20;
     public static int REQUESTS_NUMBER = 100000;
 
-    Random random = new Random(0);
+    public static double WRITE_PROBABILITY = 0.3;
+
+    public static Random random = new Random(0);
+
+    static HDD hdd = new HDD();
 
     public static void main(String[] args) {
 
@@ -36,5 +41,34 @@ public class Main {
 
         System.out.println("Number of requests per second:");
         int requestsPerSecond = scanner.nextInt();
+
+        List<Process> processes = new ArrayList<>(PROCESS_NUMBER);
+
+        int currentBlock = 0;
+
+        for (int i = 0; i < PROCESS_NUMBER; i++) {
+            FileType fileType = FileType.values()[random.nextInt(FileType.values().length)];
+            int fileSize = switch (fileType) {
+                case SMALL -> random.nextInt(1, 11);
+                case MEDIUM -> random.nextInt(11, 151);
+                case LARGE -> random.nextInt(151, 501);
+            };
+            List<Integer> blocks = new ArrayList<>(fileSize);
+            for (int j = 0; j < fileSize; j++) {
+                int block;
+                if (WRITE_PROBABILITY > random.nextDouble()) {
+                    block = currentBlock;
+                    currentBlock++;
+                } else {
+                    block = currentBlock + 1;
+                    currentBlock += 2;
+                }
+                blocks.add(block);
+                hdd.markingSector(block);
+            }
+
+            File file = new File(fileType, random.nextBoolean(), blocks);
+        }
+
     }
 }
