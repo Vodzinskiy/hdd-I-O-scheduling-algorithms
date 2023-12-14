@@ -47,28 +47,31 @@ public class Main {
         int currentBlock = 0;
 
         for (int i = 0; i < PROCESS_NUMBER; i++) {
-            FileType fileType = FileType.values()[random.nextInt(FileType.values().length)];
-            int fileSize = switch (fileType) {
-                case SMALL -> random.nextInt(1, 11);
-                case MEDIUM -> random.nextInt(11, 151);
-                case LARGE -> random.nextInt(151, 501);
-            };
-            List<Integer> blocks = new ArrayList<>(fileSize);
-            for (int j = 0; j < fileSize; j++) {
-                int block;
-                if (WRITE_PROBABILITY > random.nextDouble()) {
-                    block = currentBlock;
-                    currentBlock++;
-                } else {
-                    block = currentBlock + 1;
-                    currentBlock += 2;
-                }
-                blocks.add(block);
-                hdd.markingSector(block);
-            }
-
-            File file = new File(fileType, random.nextBoolean(), blocks);
+            processes.add(new Process(generateFile(currentBlock)));
         }
 
+    }
+
+    public static File generateFile(int currentBlock) {
+        FileType fileType = FileType.values()[random.nextInt(FileType.values().length)];
+        int fileSize = switch (fileType) {
+            case SMALL -> random.nextInt(1, 11);
+            case MEDIUM -> random.nextInt(11, 151);
+            case LARGE -> random.nextInt(151, 501);
+        };
+        List<Integer> blocks = new ArrayList<>(fileSize);
+        for (int j = 0; j < fileSize; j++) {
+            int block;
+            if (WRITE_PROBABILITY > random.nextDouble()) {
+                block = currentBlock;
+                currentBlock++;
+            } else {
+                block = currentBlock + 1;
+                currentBlock += 2;
+            }
+            blocks.add(block);
+            hdd.markingSector(block);
+        }
+        return new File(fileType, random.nextBoolean(), blocks);
     }
 }
