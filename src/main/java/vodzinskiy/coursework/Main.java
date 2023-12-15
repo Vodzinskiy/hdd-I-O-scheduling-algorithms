@@ -31,9 +31,9 @@ public class Main {
         int algorithmNumber = scanner.nextInt();
 
         SchedulingAlgorithm algorithm = switch (algorithmNumber) {
-            case 1 -> new FCFS();
-            case 2 -> new SSTF();
-            case 3 -> new F_LOOK();
+            case 1 -> new FCFS(MAXIMUM_REQUEST_NUMBER);
+            case 2 -> new SSTF(MAXIMUM_REQUEST_NUMBER);
+            case 3 -> new F_LOOK(MAXIMUM_REQUEST_NUMBER);
             default -> throw new IllegalArgumentException("non-existent algorithm");
         };
 
@@ -46,8 +46,8 @@ public class Main {
         List<Process> processes = new ArrayList<>(PROCESS_NUMBER);
 
         Processor processor = new Processor(processes, requestsPerSecond);
-
         HDD hdd = new HDD();
+        HDDController hddController = new HDDController(hdd, algorithm);
 
         for (int i = 0; i < PROCESS_NUMBER; i++) {
             processes.add(new Process(generateFile(currentBlock, hdd)));
@@ -55,11 +55,9 @@ public class Main {
 
         while (requestCounter < REQUESTS_NUMBER) {
             processor.tick();
-
+            hddController.tick();
             hdd.tick();
         }
-
-
     }
 
     public static File generateFile(int currentBlock, HDD hdd) {

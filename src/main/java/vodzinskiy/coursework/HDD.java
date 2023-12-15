@@ -8,25 +8,26 @@ import static vodzinskiy.coursework.enums.HDDState.*;
 public class HDD {
 
     public static int TRACKS_NUMBER = 500;
-    public static int NUMBER_OF_SECTORS_PER_TRACK = 100;
+    public static int SECTORS_PER_TRACK = 100;
 
     private static final int MOVING_TIME_PER_TRACK = 10;
     private static final int ROTATION_DELAY = 8;
     private static final int ALL_TRACKS_MOVEMENT_TIME = 130;
 
     @Getter
-    private final boolean[][] tracks = new boolean[TRACKS_NUMBER][NUMBER_OF_SECTORS_PER_TRACK];
+    private final boolean[][] tracks = new boolean[TRACKS_NUMBER][SECTORS_PER_TRACK];
 
     @Getter
     private HDDState state;
 
+    @Getter
     private int position = 0;
     private int movingPosition;
 
     private int movingTime = 0;
 
     private int waitingTime = 0;
-
+    @Getter
     private boolean operationReady;
 
 
@@ -35,7 +36,7 @@ public class HDD {
     }
 
     public void markingSector(int block) {
-        tracks[block / NUMBER_OF_SECTORS_PER_TRACK][block % NUMBER_OF_SECTORS_PER_TRACK] = true;
+        tracks[block / SECTORS_PER_TRACK][block % SECTORS_PER_TRACK] = true;
     }
 
     public void tick() {
