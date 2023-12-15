@@ -42,13 +42,21 @@ public class Main {
         System.out.println("Number of requests per second:");
         int requestsPerSecond = scanner.nextInt();
 
+        int currentBlock = 0;
+        int requestCounter = 0;
+
         List<Process> processes = new ArrayList<>(PROCESS_NUMBER);
 
-        int currentBlock = 0;
+        Processor processor = new Processor(processes, requestsPerSecond);
 
         for (int i = 0; i < PROCESS_NUMBER; i++) {
             processes.add(new Process(generateFile(currentBlock)));
         }
+
+        while (requestCounter < REQUESTS_NUMBER) {
+            processor.tick();
+        }
+
 
     }
 
