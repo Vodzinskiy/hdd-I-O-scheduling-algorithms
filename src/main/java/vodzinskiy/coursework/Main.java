@@ -50,7 +50,7 @@ public class Main {
         HDDController hddController = new HDDController(hdd, algorithm);
 
         for (int i = 0; i < PROCESS_NUMBER; i++) {
-            processes.add(new Process(generateFile(currentBlock, hdd)));
+            processes.add(new Process(generateFile(currentBlock, hdd), processor, hddController));
         }
 
         while (requestCounter < REQUESTS_NUMBER) {

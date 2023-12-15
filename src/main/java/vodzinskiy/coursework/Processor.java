@@ -31,13 +31,12 @@ public class Processor {
     public void tick() {
 
         if (time % 1_000L == 0L) {
-            for (Process p: processes) {
+            for (Process p : processes) {
                 p.clearRequestsCounter();
             }
         }
 
         Process process = processes.get(activeProcess);
-
 
         process.tick();
         processTime++;

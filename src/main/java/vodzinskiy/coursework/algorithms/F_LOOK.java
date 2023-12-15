@@ -10,7 +10,7 @@ public class F_LOOK implements SchedulingAlgorithm{
     }
 
     @Override
-    public void addRequest(Request request) {
+    public void addRequest(Request request) throws IllegalStateException {
 
     }
 

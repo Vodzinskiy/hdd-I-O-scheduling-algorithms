@@ -37,7 +37,7 @@ public class HDDController {
             request = r;
             state = EXECUTION;
         } else {
-          state = INACTIVE;
+            state = INACTIVE;
         }
     }
 
@@ -50,12 +50,9 @@ public class HDDController {
                     hdd.isOperationReady()) {
                 hdd.operationExecution();
                 requestTimes.add(requestTime);
-
-                //request.getProcess().
-
+                request.getProcess().processing(request);
                 executeRequest();
             }
         }
     }
-
 }

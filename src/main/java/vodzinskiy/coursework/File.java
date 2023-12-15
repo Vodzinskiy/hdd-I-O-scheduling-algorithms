@@ -1,8 +1,15 @@
 package vodzinskiy.coursework;
 
+import lombok.Builder;
+import lombok.Getter;
 import vodzinskiy.coursework.enums.FileType;
 
 import java.util.List;
 
-public record File(FileType type, boolean readOnly, List<Integer> blocks) {
+@Builder
+@Getter
+public class File {
+    private final FileType type;
+    private final boolean readOnly;
+    private final List<Integer> blocks;
 }

@@ -10,7 +10,7 @@ public class SSTF implements SchedulingAlgorithm{
         this.maxRequestNumber = maxRequestNumber;
     }
     @Override
-    public void addRequest(Request request) {
+    public void addRequest(Request request) throws IllegalStateException {
 
     }
 
