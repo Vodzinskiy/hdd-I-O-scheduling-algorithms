@@ -21,8 +21,6 @@ public class Main {
 
     public static Random random = new Random(0);
 
-    static HDD hdd = new HDD();
-
     public static void main(String[] args) {
 
         System.out.println("Choose an algorithm:");
@@ -49,18 +47,22 @@ public class Main {
 
         Processor processor = new Processor(processes, requestsPerSecond);
 
+        HDD hdd = new HDD();
+
         for (int i = 0; i < PROCESS_NUMBER; i++) {
-            processes.add(new Process(generateFile(currentBlock)));
+            processes.add(new Process(generateFile(currentBlock, hdd)));
         }
 
         while (requestCounter < REQUESTS_NUMBER) {
             processor.tick();
+
+            hdd.tick();
         }
 
 
     }
 
-    public static File generateFile(int currentBlock) {
+    public static File generateFile(int currentBlock, HDD hdd) {
         FileType fileType = FileType.values()[random.nextInt(FileType.values().length)];
         int fileSize = switch (fileType) {
             case SMALL -> random.nextInt(1, 11);
