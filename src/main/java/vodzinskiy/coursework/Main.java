@@ -1,12 +1,20 @@
 package vodzinskiy.coursework;
 
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XYChart;
+import org.knowm.xchart.XYChartBuilder;
+
 import vodzinskiy.coursework.algorithms.FCFS;
 import vodzinskiy.coursework.algorithms.F_LOOK;
 import vodzinskiy.coursework.algorithms.SSTF;
 import vodzinskiy.coursework.algorithms.SchedulingAlgorithm;
 import vodzinskiy.coursework.enums.FileType;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Main {
 
@@ -19,6 +27,8 @@ public class Main {
     public static Random random = new Random(0);
     static int currentBlock = 0;
     static int requestCounter = 0;
+
+    static long time = 0;
 
     public static void main(String[] args) {
 
@@ -48,16 +58,29 @@ public class Main {
         for (int i = 0; i < PROCESS_NUMBER; i++) {
             processes.add(new Process(generateFile(hdd), processor, hddController));
         }
+
         while (requestCounter < REQUESTS_NUMBER) {
-            processor.tick();
-            hddController.tick();
-            hdd.tick();
+            processor.execute();
+            hddController.execute();
+            hdd.execute();
+            time++;
         }
-        System.out.println(hddController.getRequestTimes().size());
+        System.out.println("Time: " + time + " ms\n");
+        System.out.println(printHdd(hdd.getTracks()));
+        chart(hddController.getRequestTimes().subList(0, 300));
     }
 
     public static void increaseCounter() {
         requestCounter++;
+    }
+
+    public static String printHdd(boolean[][] hardDriveTracks) {
+        return IntStream.range(0, 500)
+                .mapToObj(trackNumber -> trackNumber+1 + "\t" +
+                        IntStream.range(0, 100)
+                                .mapToObj(sectorNumber -> hardDriveTracks[trackNumber][sectorNumber] ? "1" : "0")
+                                .collect(Collectors.joining("")))
+                .collect(Collectors.joining("\n"));
     }
 
 
@@ -82,5 +105,16 @@ public class Main {
             hdd.markingSector(block);
         }
         return new File(fileType, random.nextBoolean(), blocks);
+    }
+
+    public static void chart(List<Integer> list) {
+        XYChart chart = new XYChartBuilder().width(1280).height(540).build();
+
+        chart.addSeries("chart", list);
+        chart.getStyler().setMarkerSize(0);
+        chart.getStyler().setLegendVisible(false);
+        chart.getStyler().setChartBackgroundColor(new Color(0xFFFFFF));
+        chart.getStyler().setPlotBorderVisible(false);
+        new SwingWrapper<>(chart).displayChart();
     }
 }

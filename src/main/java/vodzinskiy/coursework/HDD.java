@@ -39,7 +39,7 @@ public class HDD {
         tracks[block / SECTORS_PER_TRACK][block % SECTORS_PER_TRACK] = true;
     }
 
-    public void tick() {
+    public void execute() {
         if (state == INACTIVE && !operationReady) {
             state = WAITING;
             waitingTime = 1;

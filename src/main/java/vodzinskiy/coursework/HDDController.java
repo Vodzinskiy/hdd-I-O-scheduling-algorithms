@@ -44,7 +44,7 @@ public class HDDController {
         }
     }
 
-    public void tick() {
+    public void execute() {
         if (state == INACTIVE) {
             executeRequest();
         } else {

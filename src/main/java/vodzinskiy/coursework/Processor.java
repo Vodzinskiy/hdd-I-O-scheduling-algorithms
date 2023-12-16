@@ -29,7 +29,7 @@ public class Processor {
         uniformDivision();
     }
 
-    public void tick() {
+    public void execute() {
         if (time % 1000L == 0L) {
             for (Process p : processes) {
                 p.clearRequestsCounter();
