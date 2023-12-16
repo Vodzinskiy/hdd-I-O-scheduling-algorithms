@@ -29,8 +29,7 @@ public class Processor {
     }
 
     public void tick() {
-
-        if (time % 1_000L == 0L) {
+        if (time % 1000 == 0) {
             for (Process p : processes) {
                 p.clearRequestsCounter();
             }
@@ -38,8 +37,45 @@ public class Processor {
 
         Process process = processes.get(activeProcess);
 
-        process.tick();
-        processTime++;
+        if (process.isBlocked()) {
+            Process nextProcess = null;
+            for (int i = activeProcess + 1; i < processes.size(); i++) {
+                if (!processes.get(i).isBlocked()) {
+                    nextProcess = processes.get(i);
+                    break;
+                }
+            }
+            if (nextProcess != null) {
+                process = nextProcess;
+                activeProcess = processes.indexOf(process);
+            } else {
+                Process minProcess = null;
+                int minIndex = Integer.MAX_VALUE;
+                for (int i = 0; i < processes.size(); i++) {
+                    Process p = processes.get(i);
+                    if (!p.isBlocked()) {
+                        int index = processes.indexOf(p);
+                        if (index < minIndex) {
+                            minProcess = p;
+                            minIndex = index;
+                        }
+                    }
+                }
+
+                if (minProcess != null) {
+                    process = minProcess;
+                    activeProcess = processes.indexOf(minProcess);
+                } else {
+                    process = null;
+                }
+            }
+        }
+
+        if (process != null) {
+            process.setCreation(process.getRequestsCounter() < requestsPerProcess[activeProcess]);
+            process.tick();
+            processTime++;
+        }
 
         if (processTime == TIME_QUANTUM) {
             processChange();

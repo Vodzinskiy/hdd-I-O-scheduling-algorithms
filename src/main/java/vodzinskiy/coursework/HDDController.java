@@ -1,5 +1,6 @@
 package vodzinskiy.coursework;
 
+import lombok.Getter;
 import vodzinskiy.coursework.algorithms.SchedulingAlgorithm;
 import vodzinskiy.coursework.enums.ControllerState;
 import vodzinskiy.coursework.enums.HDDState;
@@ -13,7 +14,8 @@ import static vodzinskiy.coursework.enums.ControllerState.INACTIVE;
 public class HDDController {
     private final HDD hdd;
     private final SchedulingAlgorithm algorithm;
-    private List<Integer> requestTimes;
+    @Getter
+    private final List<Integer> requestTimes;
     private int requestTime = 0;
     private ControllerState state;
     private Request request;

@@ -6,10 +6,7 @@ import vodzinskiy.coursework.algorithms.SSTF;
 import vodzinskiy.coursework.algorithms.SchedulingAlgorithm;
 import vodzinskiy.coursework.enums.FileType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -19,7 +16,7 @@ public class Main {
 
     public static double WRITE_PROBABILITY = 0.3;
 
-    public static Random random = new Random(0);
+    public static Random random = new Random(40);
 
     public static void main(String[] args) {
 
@@ -57,8 +54,13 @@ public class Main {
             processor.tick();
             hddController.tick();
             hdd.tick();
+            requestCounter++;
         }
+        System.out.println(hddController.getRequestTimes().size());
+
     }
+
+
 
     public static File generateFile(int currentBlock, HDD hdd) {
         FileType fileType = FileType.values()[random.nextInt(FileType.values().length)];
