@@ -15,21 +15,22 @@ public class Processor {
     private final int requestsPerSecond;
 
     @Getter
-    private int time = 0;
+    private long time = 0;
     private int processTime = 0;
     private int activeProcess = 0;
 
-    private int[] requestsPerProcess;
+    private final int[] requestsPerProcess;
 
 
     public Processor(List<Process> processes, int requestsPerSecond) {
         this.processes = processes;
         this.requestsPerSecond = requestsPerSecond;
+        requestsPerProcess = new int[PROCESS_NUMBER];
         uniformDivision();
     }
 
     public void tick() {
-        if (time % 1000 == 0) {
+        if (time % 1000L == 0L) {
             for (Process p : processes) {
                 p.clearRequestsCounter();
             }
@@ -84,7 +85,6 @@ public class Processor {
     }
 
     public void uniformDivision() {
-        requestsPerProcess = new int[PROCESS_NUMBER];
         Arrays.fill(requestsPerProcess, 0);
         for (int i = 0, j = 0; i < requestsPerSecond; i++, j = (j + 1) % PROCESS_NUMBER) {
             requestsPerProcess[j] += 1;

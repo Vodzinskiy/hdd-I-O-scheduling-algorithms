@@ -8,6 +8,7 @@ import vodzinskiy.coursework.enums.HDDState;
 import java.util.ArrayList;
 import java.util.List;
 
+import static vodzinskiy.coursework.Main.increaseCounter;
 import static vodzinskiy.coursework.enums.ControllerState.EXECUTION;
 import static vodzinskiy.coursework.enums.ControllerState.INACTIVE;
 
@@ -51,6 +52,7 @@ public class HDDController {
             if (hdd.getState() == HDDState.INACTIVE &&
                     hdd.isOperationReady()) {
                 hdd.operationExecution();
+                increaseCounter();
                 requestTimes.add(requestTime);
                 request.getProcess().processing(request);
                 executeRequest();

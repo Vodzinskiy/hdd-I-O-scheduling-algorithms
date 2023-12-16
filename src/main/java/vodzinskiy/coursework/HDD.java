@@ -15,7 +15,7 @@ public class HDD {
     private static final int ALL_TRACKS_MOVEMENT_TIME = 130;
 
     @Getter
-    private final boolean[][] tracks = new boolean[TRACKS_NUMBER][SECTORS_PER_TRACK];
+    private boolean[][] tracks = new boolean[TRACKS_NUMBER][SECTORS_PER_TRACK];
 
     @Getter
     private HDDState state;
@@ -28,7 +28,7 @@ public class HDD {
 
     private int waitingTime = 0;
     @Getter
-    private boolean operationReady;
+    private boolean operationReady = false;
 
 
     public HDD() {
@@ -50,10 +50,10 @@ public class HDD {
                 return;
             }
             if (movingTime == MOVING_TIME_PER_TRACK) {
-                if (position < movingPosition) {
-                    position += 1;
-                } else {
+                if (position > movingPosition) {
                     position -= 1;
+                } else {
+                    position += 1;
                 }
                 movingTime = 1;
             } else {
@@ -73,8 +73,10 @@ public class HDD {
     public void move(int trackNumber) {
         if (position == trackNumber) {
             state = WAITING;
+            waitingTime = 1;
         } else {
             state = MOVING;
+            movingTime = 1;
             movingPosition = trackNumber;
         }
     }
@@ -86,4 +88,5 @@ public class HDD {
             throw new IllegalStateException("HDD is busy");
         }
     }
+
 }

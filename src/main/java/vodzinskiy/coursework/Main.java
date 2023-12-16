@@ -16,7 +16,9 @@ public class Main {
 
     public static double WRITE_PROBABILITY = 0.3;
 
-    public static Random random = new Random(40);
+    public static Random random = new Random(0);
+    static int currentBlock = 0;
+    static int requestCounter = 0;
 
     public static void main(String[] args) {
 
@@ -37,32 +39,29 @@ public class Main {
         System.out.println("Number of requests per second:");
         int requestsPerSecond = scanner.nextInt();
 
-        int currentBlock = 0;
-        int requestCounter = 0;
 
         List<Process> processes = new ArrayList<>(PROCESS_NUMBER);
-
-        Processor processor = new Processor(processes, requestsPerSecond);
         HDD hdd = new HDD();
         HDDController hddController = new HDDController(hdd, algorithm);
+        Processor processor = new Processor(processes, requestsPerSecond);
 
         for (int i = 0; i < PROCESS_NUMBER; i++) {
-            processes.add(new Process(generateFile(currentBlock, hdd), processor, hddController));
+            processes.add(new Process(generateFile(hdd), processor, hddController));
         }
-
         while (requestCounter < REQUESTS_NUMBER) {
             processor.tick();
             hddController.tick();
             hdd.tick();
-            requestCounter++;
         }
         System.out.println(hddController.getRequestTimes().size());
+    }
 
+    public static void increaseCounter() {
+        requestCounter++;
     }
 
 
-
-    public static File generateFile(int currentBlock, HDD hdd) {
+    public static File generateFile(HDD hdd) {
         FileType fileType = FileType.values()[random.nextInt(FileType.values().length)];
         int fileSize = switch (fileType) {
             case SMALL -> random.nextInt(1, 11);
