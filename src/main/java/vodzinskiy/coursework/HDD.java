@@ -59,7 +59,6 @@ public class HDD {
             } else {
                 movingTime++;
             }
-
         } else if (state == WAITING) {
             if (waitingTime == ROTATION_DELAY) {
                 state = INACTIVE;

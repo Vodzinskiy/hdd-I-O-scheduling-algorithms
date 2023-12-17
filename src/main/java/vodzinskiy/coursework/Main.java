@@ -49,7 +49,6 @@ public class Main {
         System.out.println("Number of requests per second:");
         int requestsPerSecond = scanner.nextInt();
 
-
         List<Process> processes = new ArrayList<>(PROCESS_NUMBER);
         HDD hdd = new HDD();
         HDDController hddController = new HDDController(hdd, algorithm);
@@ -66,7 +65,7 @@ public class Main {
             time++;
         }
         System.out.println("Time: " + time + " ms\n");
-        System.out.println(printHdd(hdd.getTracks()));
+        //System.out.println(printHdd(hdd.getTracks()));
         chart(hddController.getRequestTimes().subList(0, 300));
     }
 
@@ -76,7 +75,7 @@ public class Main {
 
     public static String printHdd(boolean[][] hardDriveTracks) {
         return IntStream.range(0, 500)
-                .mapToObj(trackNumber -> trackNumber+1 + "\t" +
+                .mapToObj(trackNumber -> trackNumber + 1 + "\t" +
                         IntStream.range(0, 100)
                                 .mapToObj(sectorNumber -> hardDriveTracks[trackNumber][sectorNumber] ? "1" : "0")
                                 .collect(Collectors.joining("")))

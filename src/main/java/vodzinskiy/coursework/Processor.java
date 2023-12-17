@@ -15,7 +15,7 @@ public class Processor {
     private final int requestsPerSecond;
 
     @Getter
-    private long time = 0;
+    private int time = 0;
     private int processTime = 0;
     private int activeProcess = 0;
 
@@ -30,14 +30,12 @@ public class Processor {
     }
 
     public void execute() {
-        if (time % 1000L == 0L) {
+        if (time % 1000 == 0) {
             for (Process p : processes) {
                 p.clearRequestsCounter();
             }
         }
-
         Process process = processes.get(activeProcess);
-
         if (process.isBlocked()) {
             Process nextProcess = null;
             for (int i = activeProcess + 1; i < processes.size(); i++) {
@@ -62,7 +60,6 @@ public class Processor {
                         }
                     }
                 }
-
                 if (minProcess != null) {
                     process = minProcess;
                     activeProcess = processes.indexOf(minProcess);
@@ -74,7 +71,7 @@ public class Processor {
 
         if (process != null) {
             process.setCreation(process.getRequestsCounter() < requestsPerProcess[activeProcess]);
-            process.tick();
+            process.execute();
             processTime++;
         }
 

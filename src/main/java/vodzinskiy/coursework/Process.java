@@ -50,7 +50,7 @@ public class Process {
         lastRequestedSector = file.getBlocks().getFirst();
     }
 
-    public void tick() {
+    public void execute() {
         if (state == CREATING) {
             if (creatingTime == REQUEST_PROCESSING_TIME) {
                 RequestType requestType = file.isReadOnly() ? READ
